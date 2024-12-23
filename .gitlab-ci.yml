@@ -1,14 +1,13 @@
 stages:
   - install
   - test
-  - deploy
 
 # Install dependencies
 install_dependencies:
   stage: install
-  image: node:16 # Use appropriate node version
+  image: node:16
   script:
-    - npm ci # Install dependencies using package-lock.json for consistency
+    - npm ci
   artifacts:
     paths:
       - node_modules/
@@ -16,24 +15,15 @@ install_dependencies:
 # Run tests
 test:
   stage: test
-  image: node:16 # Use appropriate node version
+  image: node:16
   services:
     - name: mongo:latest
       alias: mongo
   script:
-    - npm run lint # Optionally run linting
-    - npm run test # Assuming you have a test script defined in package.json
+    # - npm run lint
+    - npm run test
   artifacts:
     paths:
-      - coverage/ # If you generate a coverage report
+      - coverage/
   only:
-    - main # Runs tests only on the main branch (adjust as needed)
-
-# Deploy to your server (example step)
-deploy:
-  stage: deploy
-  script:
-    - echo "Deploying to production..."
-    -  # Add deployment commands here, e.g., SSH to server, upload files, etc.
-  only:
-    - main # Runs deploy only on the main branch (adjust as needed)
+    - main
