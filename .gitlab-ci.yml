@@ -30,10 +30,10 @@ test:
     - main # Runs tests only on the main branch (adjust as needed)
 
 # Deploy to your server (example step)
-deploy:
-  stage: deploy
-  script:
-    - echo "Deploying to production..."
-    -  # Add deployment commands here, e.g., SSH to server, upload files, etc.
-  only:
-    - main # Runs deploy only on the main branch (adjust as needed)
+# deploy:
+#   stage: deploy
+#   script:
+#     - echo "Deploying to production..."
+#     -  # Add deployment commands here, e.g., SSH to server, upload files, etc.
+#   only:
+#     - main # Runs deploy only on the main branch (adjust as needed)
