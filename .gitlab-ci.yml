@@ -1,10 +1,6 @@
 stages:
   - install
   - test
-<<<<<<< HEAD
-=======
-  # - deploy
->>>>>>> 2ff3c7eb3fb9b2b80d995963802dafd0f7f6249b
 
 # Install dependencies
 install_dependencies:
