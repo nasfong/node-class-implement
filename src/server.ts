@@ -8,6 +8,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core';
 import { RoleResolver } from './graphql/resolvers/RoleResolver';
+import { buildAppHeaderContext } from './graphql/plugins/buildAppHeaderContext';
 
 async function bootstrap() {
   dotenv.config();
@@ -27,9 +28,11 @@ async function bootstrap() {
     schema,
     plugins: [
       ApolloServerPluginLandingPageLocalDefault({
-        embed: true as boolean,
+        embed: true as boolean, // Allow access graphql playground
       }),
     ],
+    context: buildAppHeaderContext,
+    introspection: true // Enables tools like GraphQL, Apollo Sandbox, and Postman to see available types, queries, and mutations.
   });
 
   await apolloServer.start();

@@ -1,7 +1,7 @@
-import { ClassType, Field, Int, ObjectType } from "type-graphql";
+import { ClassType, Field, InputType, Int, ObjectType } from "type-graphql";
 
 @ObjectType()
-class Pagination {
+export class Pagination {
   @Field(() => Int)
   currentPage!: number;
 
@@ -21,11 +21,20 @@ class Pagination {
   total!: number;
 }
 
+@InputType()
+export class PagerInput {
+  @Field(() => Int, { defaultValue: 1 })
+  page: number = 1;
+
+  @Field(() => Int, { defaultValue: 20 })
+  limit: number = 20;
+}
+
 export function PaginatedResponse<TItem extends object>(
   itemsField: ClassType<TItem>
 ) {
   @ObjectType()
-  abstract class PaginatedResponseClass {
+  class PaginatedResponseClass {
     @Field(() => [itemsField])
     documents!: TItem[];
 

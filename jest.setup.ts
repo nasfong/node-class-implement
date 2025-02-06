@@ -2,33 +2,39 @@
 import { MongoMemoryServer } from 'mongodb-memory-server';
 import mongoose from 'mongoose';
 
-// Declare the server globally
 let mongoServer: MongoMemoryServer;
 
-// Increase Jest's timeout for long operations
-jest.setTimeout(30000);
-
+// Global setup before all tests
 beforeAll(async () => {
-  try {
-    // Start MongoMemoryServer
-    mongoServer = await MongoMemoryServer.create({});
-    const uri = mongoServer.getUri();
+  mongoServer = await MongoMemoryServer.create();
+  const mongoUri = mongoServer.getUri();
 
-    // Set up mongoose connection
-    await mongoose.connect(uri);
-  } catch (error) {
-    throw error;
+  await mongoose.connect(mongoUri, {
+    // Set specific options for more stable testing
+    serverSelectionTimeoutMS: 2000,
+    socketTimeoutMS: 45000,
+  });
+});
+
+// Cleanup after all tests
+afterAll(async () => {
+  if (mongoose.connection.readyState !== 0) {
+    await mongoose.disconnect();
+  }
+  if (mongoServer) {
+    await mongoServer.stop();
   }
 });
 
-afterAll(async () => {
-  try {
-    // Close mongoose connection
-    await mongoose.disconnect();
-
-    // Stop in-memory MongoDB server
-    await mongoServer.stop();
-  } catch (error) {
-    console.error('Error shutting down MongoMemoryServer:', error);
+// Reset database state between tests
+afterEach(async () => {
+  const collections = mongoose.connection.collections;
+  for (const key in collections) {
+    await collections[key].deleteMany({});
   }
+});
+
+// Optional: Add global test environment setup
+global.beforeEach(() => {
+  jest.resetAllMocks();
 });

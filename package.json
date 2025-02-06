@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node dist/server.js",
     "dev": "nodemon src/server.ts",
+    "worker": "ts-node src/worker/worker.ts",
     "build": "tsc",
     "test": "jest",
     "test:watch": "jest -i --watch",
